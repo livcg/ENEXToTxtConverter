@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+class String
+  def mgsub(key_value_pairs = []) 
+    regexp_fragments = key_value_pairs.collect { |k,v| k }
+    gsub(Regexp.union(*regexp_fragments)) do |match|
+      key_value_pairs.detect{ |k,v| k =~ match }[1]
+    end
+  end
+end
+
+open('/Users/liv/Desktop/enote.processed.txt', 'w') { |f| 
+  open('/Users/liv/Desktop/enote.enex').each { |x| 
+
+     # First pass - Preserves title & content
+     match = Regexp.compile('<title>(.*)<\/title>.*<content><\!\[CDATA[^>]*><!DOCTYPE[^>]*><en\-note[^>]*><div>(.*)<\/div><\/en\-note>\]\]><\/content>').match(x)
+
+     if match
+       x = "TITLE: " + match[1] + " :ENDTITLE;" + match[2] + "\n\n"
+
+       # Second pass - Replaces fixed strings
+       f.puts(x.mgsub(
+         [ 
+	   [/TITLE: /i, "\nTITLE: "],
+	   [/ :ENDTITLE;/i, "\n"],
+	   [/<br\/>/i, "\n"],
+	   [/\&apos\;/i, "\'"],
+	   [/\&amp\;/i, "&"],
+	   [/<div>/i, "\n"],
+	   [/<\/div>/i, ""],
+ 	 ]))
+     end
+  }
+}
