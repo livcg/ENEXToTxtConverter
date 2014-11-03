@@ -9,23 +9,24 @@ class String
   end
 end
 
-open('/Users/liv/Desktop/enote.processed.txt', 'w') { |f| 
-  open('/Users/liv/Desktop/enote.enex').each { |x| 
+open('enote.processed.txt', 'w') { |f| 
+  open('enote.enex').each { |x| 
 
-     # First pass - Preserves title & content
+     # First pass - Preserve title & content
      match = Regexp.compile('<title>(.*)<\/title>.*<content><\!\[CDATA[^>]*><!DOCTYPE[^>]*><en\-note[^>]*><div>(.*)<\/div><\/en\-note>\]\]><\/content>').match(x)
 
      if match
-       x = "TITLE: " + match[1] + " :ENDTITLE;" + match[2] + "\n\n"
+       x = "\nTITLE: " + match[1] + "\n" + match[2] + "\n\n"
 
-       # Second pass - Replaces fixed strings
+       # Second pass - Replace fixed strings
        f.puts(x.mgsub(
          [ 
-	   [/TITLE: /i, "\nTITLE: "],
-	   [/ :ENDTITLE;/i, "\n"],
-	   [/<br\/>/i, "\n"],
 	   [/\&apos\;/i, "\'"],
 	   [/\&amp\;/i, "&"],
+           [/&quot\;/i, "\""],
+           [/&lt\;/i, "<"],
+           [/&gt\;/i, ">"],
+	   [/<br\/>/i, "\n"],
 	   [/<div>/i, "\n"],
 	   [/<\/div>/i, ""],
  	 ]))
