@@ -12,9 +12,9 @@ end
 def main 
   if (ARGV.length == 1)
     input_file = ARGV.first
-    output_file = input_file + ".processed.txt"
-    puts "in: " + input_file
-    puts "out: " + output_file
+    puts "Input file: " + input_file
+    output_file = input_file.gsub(/\.enex$/i, ".processed.txt")
+    puts "Output file: " + output_file
   else
     puts "Usage: $0 <input_file>"
     exit 1
