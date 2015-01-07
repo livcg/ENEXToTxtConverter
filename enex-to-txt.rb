@@ -9,36 +9,51 @@ class String
   end
 end
 
-open('enote.processed.txt', 'w') { |f| 
-  open('enote.enex').each { |x| 
+def main 
+  if (ARGV.length == 1)
+    input_file = ARGV.first
+    output_file = input_file + ".processed.txt"
+    puts "in: " + input_file
+    puts "out: " + output_file
+  else
+    puts "Usage: $0 <input_file>"
+    exit 1
+  end
 
-     # First pass - Preserve title & content
-     match = Regexp.compile('<title>(.*)<\/title>.*<content><\!\[CDATA[^>]*><!DOCTYPE[^>]*><en\-note[^>]*><div>(.*)<\/div><\/en\-note>\]\]><\/content>').match(x)
+  open(output_file, 'w') { |f| 
+    open(input_file).each { |x| 
 
-     if match
-       x = "\nTITLE: " + match[1] + "\n" + match[2] + "\n\n"
+      # First pass - Preserve title & content
+      match = Regexp.compile('<title>(.*)<\/title>.*<content><\!\[CDATA[^>]*><!DOCTYPE[^>]*><en\-note[^>]*><div>(.*)<\/div><\/en\-note>\]\]><\/content>').match(x)
 
-       # Second pass - Replace fixed strings
-       f.puts(x.mgsub(
-         [ 
-	   [/\&apos\;/i, "\'"],
-           [/&\#8217\;/i, "\'"],
-	   [/\&amp\;/i, "&"],
-           [/&quot\;/i, "\""],
-           [/&lt\;/i, "<"],
-           [/&gt\;/i, ">"],
-           [/&\#8212\;/i, "--"],
-           [/&\#8220\;/i, "\""],
-           [/&\#8221\;/i, "\""],
-           [/&\#8230\;/i, "..."],
-#           [/&\#160\;/i, "\t"],
-#           [/&\#163\;/i, "$"], # Actually GBP sign?
-	   [/<br\/>/i, "\n"],
-	   [/<div>/i, "\n"],
-	   [/<\/div>/i, ""],
+      if match
+        x = "\nTITLE: " + match[1] + "\n" + match[2] + "\n\n"
 
-           # &#160; == &nbsp;
- 	 ]))
-     end
+        # Second pass - Replace fixed strings
+        f.puts(x.mgsub(
+                       [ 
+                        [/\&apos\;/i, "\'"],
+                        [/&\#8217\;/i, "\'"],
+                        [/\&amp\;/i, "&"],
+                        [/&quot\;/i, "\""],
+                        [/&lt\;/i, "<"],
+                        [/&gt\;/i, ">"],
+                        [/&\#8212\;/i, "--"],
+                        [/&\#8220\;/i, "\""],
+                        [/&\#8221\;/i, "\""],
+                        [/&\#8230\;/i, "..."],
+                        #           [/&\#160\;/i, "\t"],
+                        #           [/&\#163\;/i, "$"], # Actually GBP sign?
+                        [/<br\/>/i, "\n"],
+                        [/<div>/i, "\n"],
+                        [/<\/div>/i, ""],
+
+                        # &#160; == &nbsp;
+                       ]))
+      end
+    }
   }
-}
+  exit 0
+end
+
+main
