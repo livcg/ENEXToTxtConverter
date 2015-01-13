@@ -16,7 +16,7 @@ def main
     output_file = input_file.gsub(/\.enex$/i, ".processed.txt")
     puts "Output file: " + output_file
   else
-    puts "Usage: $0 <input_file>"
+    puts "Usage: " + $0 + " <input_file>" 
     exit 1
   end
 
