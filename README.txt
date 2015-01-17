@@ -6,10 +6,10 @@ x. Push to Github
 x. Add test data
 x. Rename enote-converter.irb to enex-to-txt.irb ?
 x. Add input & output files as args
+x. Use XML modules instead of regex (though regexes are fun)
 * Add tests
-** Use XML modules instead of regex (though regexes are fun)
-** Print count of # of notes in input & output files
-** Preserve created date and convert to YYYY/MM/DD HH:MM format?  Or only do when @ds, @ts, @dts, etc. shortcuts are detected
+* Print count of # of notes in input & output files
+* Preserve created date and convert to YYYY/MM/DD HH:MM format?  Or only do when @ds, @ts, @dts, etc. shortcuts are detected
 * Or consolidate regex matching into 1 pass; figure out how to pass matched substrings into mgsub?
 * Convert all character entities
 * Handle non-text content - Images, audio, etc.
@@ -17,4 +17,4 @@ x. Add input & output files as args
     <en-media type="audio/amr" hash="b79f6cfe0d86279eb49839481f5fd96e"/>
 * Incorporate this script into an Evernote app that automatically retrieves all the notes from a given notebook
 * When there are <div>'s w/in content, add curly braces around entire content?
-* Remove "TITLE: Untitled Note" lines?
+* Remove "TITLE: Untitled Note" lines?  Or replace w/ just "TITLE: "?
